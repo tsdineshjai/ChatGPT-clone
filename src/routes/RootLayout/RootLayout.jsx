@@ -20,7 +20,7 @@ const RootLayout = () => {
 			<section className="rootLayout">
 				<header>
 					<Link to="/" className="link">
-						<img src="/ariplay.svg" className="logo" />
+						<img src="/logo.png" className="logo" />
 						<span>TSRI AI </span>
 					</Link>
 					<div className="user">

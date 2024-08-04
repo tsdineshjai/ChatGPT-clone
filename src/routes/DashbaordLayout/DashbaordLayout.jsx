@@ -1,7 +1,8 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "./DashbaordLayout.css";
 import { useAuth } from "@clerk/clerk-react";
 import React from "react";
+import ChatList from "../../Components/ChatList";
 
 const DashbaordLayout = () => {
 	const { userId, isLoaded } = useAuth();
@@ -19,8 +20,10 @@ const DashbaordLayout = () => {
 	}
 
 	return (
-		<section>
-			<section className="menu">MENU</section>
+		<section className="dashBoard">
+			<section className="menu">
+				<ChatList />
+			</section>
 			<main className="content">
 				<Outlet />
 			</main>
