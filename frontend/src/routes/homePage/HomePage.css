@@ -1,0 +1,255 @@
+.homepage {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  padding: 0 2rem;
+  gap: 100px;
+
+  @media screen and (max-width:1077px) {
+
+    flex-direction: column;
+  }
+
+  @media screen and (max-width:917px) {
+    gap: 50px;
+  }
+
+  .left {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    gap: 1.25rem;
+    width: 50%;
+
+    @media screen and (max-width:580px) {
+      gap: 0.15rem;
+    }
+
+    h1 {
+      font-size: 5rem;
+      background-image: linear-gradient(to right, deeppink, rgb(166, 16, 16), purple, magenta, gold);
+      background-clip: text;
+      color: transparent;
+      -webkit-background-clip: text;
+
+      @media screen and (max-width:917px) {
+        font-size: 3.5rem;
+      }
+
+      @media screen and (max-width:720px) {
+        font-size: 2rem;
+      }
+    }
+
+    h3 {
+      color: rgb(245, 245, 245);
+      font-weight: lighter;
+      text-align: center;
+
+
+      @media screen and (max-width:917px) {
+        text-align: center;
+        font-size: 1.25rem;
+      }
+
+      @media screen and (max-width:720px) {
+        font-size: 0.75rem;
+      }
+    }
+
+    h5 {
+      padding: 0 2rem;
+      text-align: center;
+      color: whitesmoke;
+      opacity: 0.9;
+
+      @media screen and (max-width:800px) {
+        font-size: 0.75rem;
+
+      }
+
+      @media screen and (max-width:720px) {
+        font-size: 0.55rem;
+      }
+
+      @media screen and (max-width:580px) {
+        display: none;
+      }
+    }
+
+    button {
+      background-color: rgb(81, 3, 81);
+      color: white;
+      border-radius: 22px;
+      padding: 0.5rem 1.15rem;
+      border: none;
+      transition: all 0.32s ease-out;
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(180, 14, 180, 0.5);
+        transform: scale(1.1);
+      }
+
+
+      @media screen and (max-width:720px) {
+
+        padding: 0.35rem 0.75rem;
+        font-size: 11px;
+      }
+    }
+
+    .backgrounOfLeft {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      opacity: 0.05;
+      object-fit: cover;
+      animation: orbital infinite linear 100s;
+      z-index: -9999;
+    }
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    place-items: center;
+    height: 50%;
+    position: relative;
+    width: 50%;
+    background-color: rgb(46, 0, 46);
+    border-radius: 22px;
+    overflow: hidden;
+
+
+    @media screen and (max-width:720px) {
+      height: 40%;
+      width: 70%;
+
+    }
+
+
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 95%;
+      object-fit: cover;
+      animation: bgStars infinite alternate 10s ease-in-out;
+    }
+
+    .robot {
+      height: 75%;
+      margin: 0 auto;
+      z-index: 9999;
+      animation: roboAnimate 3s infinite alternate;
+
+      @media screen and (max-width:720px) {
+        height: 55%;
+      }
+
+      @media screen and (max-width:580px) {
+        height: 35%;
+      }
+    }
+
+    .typeAnimation {
+
+      position: absolute;
+      bottom: 0;
+      right: 0px;
+      background-color: purple;
+      border-radius: 22px;
+      font-size: 17px;
+      padding: 0.25rem 0.55rem;
+      display: flex;
+      place-items: center;
+      gap: 0.25rem;
+      animation: linear;
+
+      @media screen and (max-width:720px) {
+        display: none;
+      }
+
+      img {
+        height: 20px;
+        border-radius: 50%;
+        object-fit: contain;
+
+      }
+
+    }
+
+  }
+
+  .terms {
+
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    gap: 1rem;
+
+    .links {
+      display: flex;
+      place-items: center;
+      gap: 0.5rem;
+      font-size: 13px;
+      font-weight: lighter;
+      padding: 0 0.5rem;
+
+      .link {
+        margin-left: -10px;
+      }
+    }
+
+
+    img {
+      height: 13px;
+      margin: 0 auto;
+    }
+  }
+}
+
+
+
+@keyframes roboAnimate {
+
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-10deg);
+  }
+
+}
+
+@keyframes orbital {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(50deg);
+  }
+}
+
+@keyframes bgStars {
+
+  0% {
+    transform: translateX(-20px);
+  }
+
+  100% {
+    transform: translate(30px);
+  }
+
+}
