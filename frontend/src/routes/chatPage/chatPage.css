@@ -24,6 +24,9 @@
       gap: 0.25rem;
       font-size: small;
 
+      p, li {
+        margin: 10px;
+      }
       .message {
         padding: 20px;
 

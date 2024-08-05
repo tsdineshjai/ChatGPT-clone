@@ -10,13 +10,13 @@ const ChatList = () => {
 			<Link>Contact</Link>
 
 			<hr />
-			<sectionn className="chats">
+			<section className="chats">
 				<p>My Chat Title</p>
 				<p>My Chat Title</p>
 				<p>My Chat Title</p>
 				<p>My Chat Title</p>
 				<p>My Chat Title</p>
-			</sectionn>
+			</section>
 
 			<hr />
 			<section className="proSection">
