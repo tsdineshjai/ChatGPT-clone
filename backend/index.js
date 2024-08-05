@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
 
 import ImageKit from "imagekit";
@@ -10,6 +11,16 @@ const imagekit = new ImageKit({
 	publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
 	privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
 });
+
+const connect = () => {
+	try {
+		mongoose
+			.connect(process.env.MONGO_DB)
+			.then(() => console.log("Connected! to the mongoDB"));
+	} catch (err) {
+		console.log(err);
+	}
+};
 
 const app = express();
 
@@ -40,4 +51,7 @@ app.get("/", (req, res) => {
 	res.send("it works and works");
 });
 
-app.listen(PORT, () => console.log("server listening to the port 3000"));
+app.listen(PORT, () => {
+	connect();
+	console.log("server listening to the port 3000");
+});
