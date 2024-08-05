@@ -10,9 +10,9 @@ function NewPrompt() {
 		isLoading: false,
 		error: "",
 		dBdata: {},
+		aiData: {},
 	});
 	const [aiResponse, setAiResponse] = React.useState("");
-	const [loading, setLoading] = React.useState(false);
 	const [question, setQuestion] = React.useState("");
 
 	const endRef = React.useRef(null);
@@ -20,20 +20,47 @@ function NewPrompt() {
 		endRef.current.scrollIntoView({ behaviour: "smooth" });
 	}, [aiResponse, img.dBdata, question]);
 
+	const chat = model.startChat({
+		history: [
+			{
+				role: "user",
+				parts: [{ text: "Hello, I have 2 dogs in my house." }],
+			},
+			{
+				role: "model",
+				parts: [{ text: "Great to meet you. What would you like to know?" }],
+			},
+		],
+		generationConfig: {
+			// maxOutputTokens: 100,
+		},
+	});
+
 	const add = async (text) => {
 		setQuestion(text);
-		const result = await model.generateContent(text);
-		const response = await result.response;
-		setAiResponse(response.text());
+		const result = await chat.sendMessageStream(
+			Object.entries(img.aiData).length ? [img.aiData, text] : [text]
+		);
+
+		let accumulatedText = "";
+		for await (const chunk of result.stream) {
+			const chunkText = chunk.text();
+			accumulatedText += chunkText;
+			setAiResponse(accumulatedText);
+		}
+		setImg({
+			isLoading: false,
+			error: "",
+			dBdata: {},
+			aiData: {},
+		});
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const text = e.target.text.value;
 		if (!text) return;
-		setLoading(true);
-		await add(text);
-		setLoading(false);
+		add(text);
 	};
 
 	return (
@@ -53,11 +80,7 @@ function NewPrompt() {
 			{!!question && <div className="question"> {question} </div>}
 
 			<div className="response" style={{ margin: "20px 5px" }}>
-				{loading ? (
-					<h1>Loading... </h1>
-				) : (
-					!!aiResponse && <Markdown>{aiResponse}</Markdown>
-				)}
+				{!!aiResponse && <Markdown>{aiResponse}</Markdown>}
 			</div>
 
 			<div className="endOfChat" ref={endRef}></div>
