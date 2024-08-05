@@ -11,34 +11,33 @@ function NewPrompt() {
 		error: "",
 		dBdata: {},
 	});
-	const [prompt, setPrompt] = React.useState("");
 	const [aiResponse, setAiResponse] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
+	const [question, setQuestion] = React.useState("");
 
 	const endRef = React.useRef(null);
 	React.useEffect(() => {
 		endRef.current.scrollIntoView({ behaviour: "smooth" });
-	}, [aiResponse, img.dBdata]);
+	}, [aiResponse, img.dBdata, question]);
 
-	const run = async () => {
-		const result = await model.generateContent(prompt);
+	const add = async (text) => {
+		setQuestion(text);
+		const result = await model.generateContent(text);
 		const response = await result.response;
 		setAiResponse(response.text());
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!prompt) return;
+		const text = e.target.text.value;
+		if (!text) return;
 		setLoading(true);
-		await run();
-		setPrompt("");
+		await add(text);
 		setLoading(false);
 	};
 
 	return (
 		<div className="newPrompt">
-			{/* end of the chat */}
-
 			{img.isLoading && <div>Loading...</div>}
 
 			{/* fetching the uploaded image from the image kit database */}
@@ -51,9 +50,7 @@ function NewPrompt() {
 				/>
 			)}
 
-			<div className="endOfChat" ref={endRef}></div>
-
-			{!!prompt && <div className="question"> {prompt} </div>}
+			{!!question && <div className="question"> {question} </div>}
 
 			<div className="response" style={{ margin: "20px 5px" }}>
 				{loading ? (
@@ -63,6 +60,7 @@ function NewPrompt() {
 				)}
 			</div>
 
+			<div className="endOfChat" ref={endRef}></div>
 			<form className="newForm" onSubmit={handleSubmit}>
 				<Upload setImg={setImg} />
 				<input type="file" id="file" multiple={false} hidden />
@@ -71,8 +69,7 @@ function NewPrompt() {
 					type="text"
 					className="search"
 					placeholder="Ask me anything... "
-					value={prompt}
-					onChange={(e) => setPrompt(e.target.value)}
+					name="text"
 				/>
 				<button>
 					<img src="/arrow.png" alt="" />
