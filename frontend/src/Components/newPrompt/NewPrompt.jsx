@@ -1,6 +1,7 @@
 import { IKImage } from "imagekitio-react";
 import Upload from "../Upload/Upload";
 import Markdown from "react-markdown";
+
 import "./NewPrompt.css";
 
 import React from "react";
