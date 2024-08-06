@@ -11,6 +11,7 @@ import {
 	SignInPage,
 	SignUpPage,
 } from "./routes";
+import React from "react";
 
 const router = createBrowserRouter([
 	{

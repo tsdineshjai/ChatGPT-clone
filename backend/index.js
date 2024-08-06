@@ -127,7 +127,6 @@ app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
 	}
 });
 
-
 //finding a partiuclar chat
 app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
 	const userId = req.auth.userId;
@@ -140,6 +139,38 @@ app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
 	} catch (err) {
 		console.log(err);
 		res.status(500).send("Error occurred in fetching chats");
+	}
+});
+
+//updating a partiuclar chat
+app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
+	const userId = req.auth.userId;
+
+	const { question, answer, img } = req.body;
+
+	const newItems = [
+		...(question
+			? [{ role: "user", parts: [{ text: question }], ...(img && { img }) }]
+			: []),
+		{ role: "model", parts: [{ text: answer }] },
+	];
+
+	try {
+		const updatedChat = await Chat.updateOne(
+			{ _id: req.params.id, userId },
+			{
+				$push: {
+					history: {
+						$each: newItems,
+					},
+				},
+			}
+		);
+		console.log(updatedChat);
+		res.status(200).send(updatedChat);
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("Error occurred in adding conversations");
 	}
 });
 

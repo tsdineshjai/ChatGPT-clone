@@ -15,7 +15,12 @@ const ChatList = () => {
 		<section className="chatList">
 			<span
 				className="title"
-				style={{ textAlign: "center", fontSize: "13px", margin: "0 auto" }}
+				style={{
+					textAlign: "center",
+					fontSize: "13px",
+					marginRight: "auto",
+					paddingLeft: "15px",
+				}}
 			>
 				DASHBOARD
 			</span>

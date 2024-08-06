@@ -10,8 +10,6 @@ const ChatPage = () => {
 	const path = useLocation().pathname;
 	const chatId = path.split("/").pop();
 
-	console.log(chatId);
-
 	const { isPending, error, data } = useQuery({
 		queryKey: ["chat", chatId],
 		queryFn: () =>
@@ -19,8 +17,6 @@ const ChatPage = () => {
 				credentials: "include",
 			}).then((res) => res.json()),
 	});
-
-	console.log(Array.isArray(data));
 
 	return (
 		<section className="chatPage">
@@ -47,16 +43,14 @@ const ChatPage = () => {
 										className={
 											message.role === "user" ? "message user" : "message"
 										}
-										key={i}
+										key={i + "-1345"}
 									>
 										<Markdown>{message.parts[0].text}</Markdown>
 									</div>
 								</>
 						  ))}
 
-					<div className="prompt">
-						<NewPrompt />
-					</div>
+					<div className="prompt">{data && <NewPrompt data={data} />}</div>
 				</div>
 			</div>
 		</section>
