@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import ImageKit from "imagekit";
+import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 
+import ImageKit from "imagekit";
 import Chat from "./models/chats.js";
 import UserChats from "./models/userChats.js";
 
@@ -28,9 +29,15 @@ const app = express();
 
 app.use(express.json());
 
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.status(401).send("Unauthenticated!");
+});
+
 app.use(
 	cors({
 		origin: process.env.CLIENT_URL,
+		credentials: true,
 	})
 );
 
@@ -53,8 +60,9 @@ app.get("/", (req, res) => {
 	res.send("it works and works");
 });
 
-app.post("/api/chats", async (req, res) => {
-	const { userId, text } = req.body;
+app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
+	const userId = req.auth.userId;
+	const { text } = req.body;
 
 	try {
 		// CREATE A NEW CHAT
@@ -86,6 +94,7 @@ app.post("/api/chats", async (req, res) => {
 			console.log(`newUSerChats is created successfully`, newUserChats._id);
 		} else {
 			// IF EXISTS, PUSH THE CHAT TO THE EXISTING ARRAY
+			console.log(`i came to push the chat.`);
 			await UserChats.updateOne(
 				{ userId: userId },
 				{
@@ -99,12 +108,38 @@ app.post("/api/chats", async (req, res) => {
 			);
 
 			res.status(201).send(newChat._id);
-
-			console.log(`newUSerChats is updated successfully`, newUserChats._id);
+			console.log(`newUSerChats is updated successfully`);
 		}
 	} catch (err) {
-		console.log(`error has occured`);
+		console.log(`error has occured in saving the chat to the chats history`);
 		res.status(500).send(`Error creating Chat!`);
+	}
+});
+
+app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
+	const userId = req.auth.userId;
+	try {
+		const fetchedChats = await UserChats.find({ userId });
+		res.status(200).send(fetchedChats[0].chats);
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("Error occurred in fetching chats");
+	}
+});
+
+
+//finding a partiuclar chat
+app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
+	const userId = req.auth.userId;
+
+	const chatId = req.params.id;
+	try {
+		//it fetches all the chats from the userID
+		const fetchedChats = await Chat.find({ _id: chatId, userId });
+		res.status(200).send(fetchedChats);
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("Error occurred in fetching chats");
 	}
 });
 

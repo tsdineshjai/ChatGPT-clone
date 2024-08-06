@@ -1,12 +1,7 @@
-import axios from "axios";
-
-import { useAuth } from "@clerk/clerk-react";
 
 import "./dashboardPage.css";
 
 const DashboardPage = () => {
-	const { userId } = useAuth();
-
 	async function handleSubmit(e) {
 		e.preventDefault();
 		const text = e.target.text.value;
@@ -15,22 +10,30 @@ const DashboardPage = () => {
 		}
 		//either one of the below type of requests are fine.
 
-		axios
-			.post("http://localhost:3000/api/chats", {
-				text,
-				userId,
-			})
-			.then((res) => console.log(res))
-			.catch((err) => console.log(err))
-			.finally(() => console.log(`post request was made`));
+		//withCredentials: true, we are gonna send userId information via cookies via clerk.
 
-		// 	await fetch("http://localhost:3000/api/chats", {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
+		// axios
+		// 	.post(
+		// 		"http://localhost:3000/api/chats",
+		// 		{
+		// 			text,
 		// 		},
-		// 		body: JSON.stringify({ text, userId }),
-		// 	});
+		// 		{
+		// 			withCredentials: true,
+		// 		}
+		// 	)
+		// 	.then((res) => console.log(res))
+		// 	.catch((err) => console.log(err))
+		// 	.finally(() => console.log(`post request was made`));
+
+		await fetch("http://localhost:3000/api/chats", {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ text }),
+		});
 	}
 	return (
 		<div className="dashboardPage">

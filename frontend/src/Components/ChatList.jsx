@@ -1,23 +1,39 @@
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 import "./ChatList.css";
 
 const ChatList = () => {
+	const { isPending, error, data } = useQuery({
+		queryKey: ["userChats"],
+		queryFn: () =>
+			fetch(`${import.meta.env.VITE_API_URL}/api/userchats`, {
+				credentials: "include",
+			}).then((res) => res.json()),
+	});
 	return (
 		<section className="chatList">
-			<Link>Create a new Chat</Link>
-			<Link>Explore TSRI AI</Link>
-			<Link>Contact</Link>
-
+			<span
+				className="title"
+				style={{ textAlign: "center", fontSize: "13px", margin: "0 auto" }}
+			>
+				DASHBOARD
+			</span>
+			<Link to="/dashboard">Create a new Chat</Link>
+			<Link to="/">Explore TSRI AI</Link>
+			<Link to="/">Contact</Link>
 			<hr />
 			<section className="chats">
-				<p>My Chat Title</p>
-				<p>My Chat Title</p>
-				<p>My Chat Title</p>
-				<p>My Chat Title</p>
-				<p>My Chat Title</p>
+				{isPending
+					? "Loading..."
+					: error
+					? "Something went wrong!"
+					: data?.map((chat) => (
+							<Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
+								{chat.title}
+							</Link>
+					  ))}
 			</section>
-
 			<hr />
 			<section className="proSection">
 				<img src="logo.png" alt="logo" />
