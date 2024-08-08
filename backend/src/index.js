@@ -4,8 +4,8 @@ import cors from "cors";
 import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 
 import ImageKit from "imagekit";
-import Chat from "./models/chats.js";
-import UserChats from "./models/userChats.js";
+import Chat from "../models/chats.js";
+import UserChats from "../models/userChats.js";
 
 const PORT = process.env.PORT || 3000;
 
