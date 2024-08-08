@@ -64,12 +64,16 @@ function NewPrompt({ data }) {
 	});
 
 	const chat = model.startChat({
-		history: [],
+		history: [
+			data[0]?.history.map(({ role, parts }) => ({
+				role,
+				parts: [{ text: parts[0].text }],
+			})),
+		],
 		generationConfig: {
 			// maxOutputTokens: 100,
 		},
 	});
-
 	const addCallback = React.useCallback(
 		async (text, isInitial) => {
 			if (!isInitial) {
@@ -126,7 +130,7 @@ function NewPrompt({ data }) {
 			}
 		}
 		hasRun.current = true;
-	}, []);
+	}, [addCallback]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
