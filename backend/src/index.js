@@ -36,20 +36,20 @@ app.use((err, req, res, next) => {
 
 app.use(
 	cors({
-		origin: process.env.CLIENT_URL,
+		origin: "*",
 		credentials: true,
 	})
 );
 
-// // allow cross-origin requests
-// app.use(function (req, res, next) {
-// 	res.header("Access-Control-Allow-Origin", "*");
-// 	res.header(
-// 		"Access-Control-Allow-Headers",
-// 		"Origin, X-Requested-With, Content-Type, Accept"
-// 	);
-// 	next();
-// });
+// allow cross-origin requests
+app.use(function (req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept"
+	);
+	next();
+});
 
 app.get("/api/upload", function (req, res) {
 	var result = imagekit.getAuthenticationParameters();
