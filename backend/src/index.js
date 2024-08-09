@@ -37,7 +37,7 @@ app.use(express.json());
 // );
 
 const corsOptions = {
-	origin: "https://chat-gpt-clone-brown-five.vercel.app",
+	origin: "chat-gpt-clone-brown-five.vercel.app",
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 	allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
 	credentials: true, // Allow cookies or other credentials
