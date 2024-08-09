@@ -1,18 +1,32 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 
 import ImageKit from "imagekit";
 import Chat from "../models/chats.js";
 import UserChats from "../models/userChats.js";
 
+// Load environment variables from .env file
+dotenv.config();
+
 const PORT = process.env.PORT || 3000;
 
-const imagekit = new ImageKit({
-	urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
-	publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
-	privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
+const app = express();
+
+app.use(express.json());
+
+app.use(
+	cors({
+		origin: "https://chat-gpt-clone-brown-five.vercel.app",
+		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		credentials: true, // If you need to include cookies or other credentials
+	})
+);
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.status(401).send("Unauthenticated!");
 });
 
 const connect = () => {
@@ -25,38 +39,19 @@ const connect = () => {
 	}
 };
 
-const app = express();
-
-app.use(express.json());
-
-// app.use(
-// 	cors({
-// 		origin: "*",
-// 		credentials: true,
-// 	})
-// );
-
-const corsOptions = {
-	origin: "chat-gpt-clone-brown-five.vercel.app",
-	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-	allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
-	credentials: true, // Allow cookies or other credentials
-	optionsSuccessStatus: 204, // Some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-
-app.use(cors(corsOptions));
-
-app.use((err, req, res, next) => {
-	console.error(err.stack);
-	res.status(401).send("Unauthenticated!");
-});
-app.get("/api/upload", function (req, res) {
-	var result = imagekit.getAuthenticationParameters();
-	res.send(result);
+const imagekit = new ImageKit({
+	urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
+	publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
+	privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
 });
 
 app.get("/", (req, res) => {
-	res.send("it works and works");
+	res.send(`it works`);
+});
+
+app.get("/api/upload", function (req, res) {
+	var result = imagekit.getAuthenticationParameters();
+	res.send(result);
 });
 
 app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
