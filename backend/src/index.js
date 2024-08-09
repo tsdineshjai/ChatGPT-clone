@@ -29,28 +29,27 @@ const app = express();
 
 app.use(express.json());
 
+// app.use(
+// 	cors({
+// 		origin: "*",
+// 		credentials: true,
+// 	})
+// );
+
+const corsOptions = {
+	origin: "https://chat-gpt-clone-brown-five.vercel.app",
+	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+	allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
+	credentials: true, // Allow cookies or other credentials
+	optionsSuccessStatus: 204, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
 app.use((err, req, res, next) => {
 	console.error(err.stack);
 	res.status(401).send("Unauthenticated!");
 });
-
-app.use(
-	cors({
-		origin: "*",
-		credentials: true,
-	})
-);
-
-// allow cross-origin requests
-app.use(function (req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept"
-	);
-	next();
-});
-
 app.get("/api/upload", function (req, res) {
 	var result = imagekit.getAuthenticationParameters();
 	res.send(result);
